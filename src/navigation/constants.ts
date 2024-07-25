@@ -8,8 +8,11 @@ export const SCREENS = {
         },
     },
     HOME: {
-        TABSSTACK: {
-            ID: 'TABSSTACK'
+        HOME: {
+            ID: 'HOME'
+        },
+        PROFILE: {
+            ID: 'PROFILE'
         }
     },
 }
