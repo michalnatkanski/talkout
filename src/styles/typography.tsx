@@ -23,15 +23,14 @@ export const FONT_WEIGHT_MEDIUM = '400';
 export const FONT_WEIGHT_LIGHT = '300';
 
 export const LINE_HEIGHT_24 = scaleFont(24);
-export const LINE_HEIGHT_20 = scaleFont(20);
 export const LINE_HEIGHT_22 = scaleFont(22);
+export const LINE_HEIGHT_20 = scaleFont(20);
 export const LINE_HEIGHT_16 = scaleFont(16);
 export const LINE_HEIGHT_14 = scaleFont(14);
 
 export const FONT_BOLD: TextStyle = {
   fontFamily: FONT_FAMILY_BOLD,
   fontWeight: FONT_WEIGHT_BOLD,
-  lineHeight: LINE_HEIGHT_24,
 };
 
 export const FONT_SEMI_BOLD: TextStyle = {
@@ -42,17 +41,14 @@ export const FONT_SEMI_BOLD: TextStyle = {
 export const FONT_REGULAR: TextStyle = {
   fontFamily: FONT_FAMILY_REGULAR,
   fontWeight: FONT_WEIGHT_REGULAR,
-  lineHeight: LINE_HEIGHT_22,
 };
 
 export const FONT_MEDIUM: TextStyle = {
   fontFamily: FONT_FAMILY_MEDIUM,
   fontWeight: FONT_WEIGHT_MEDIUM,
-  lineHeight: LINE_HEIGHT_20,
 };
 
 export const FONT_LIGHT: TextStyle = {
   fontFamily: FONT_FAMILY_LIGHT,
   fontWeight: FONT_WEIGHT_LIGHT,
-  lineHeight: LINE_HEIGHT_16,
 };
