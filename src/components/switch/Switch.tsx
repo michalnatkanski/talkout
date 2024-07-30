@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useRef} from 'react';
 import {View, TouchableWithoutFeedback, Text} from 'react-native';
 import styles from './Switch.styles';
 import Animated, {
@@ -51,7 +51,9 @@ const Square = React.memo(
 );
 
 export const Switch = React.memo(({setIsEnabled, isEnabled}: SwitchProps) => {
-  const rotations = rotationConfigs.map(() => useSharedValue(0));
+  const rotations = useRef(
+    rotationConfigs.map(() => useSharedValue(0)),
+  ).current;
 
   useEffect(() => {
     rotations.map((rotation, i) => {
@@ -70,7 +72,7 @@ export const Switch = React.memo(({setIsEnabled, isEnabled}: SwitchProps) => {
     return {
       left: isEnabled ? withTiming(75) : withTiming(0),
     };
-  });
+  }, [isEnabled]);
 
   const rotationsStyles = rotations.map((rotation, i) => {
     return useAnimatedStyle(() => {
