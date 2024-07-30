@@ -134,7 +134,7 @@ export const Switch = ({setIsEnabled, isEnabled}: SwitchProps) => {
         </View>
       </TouchableWithoutFeedback>
       <Text style={styles.heading}>
-        {isEnabled ? 'I need a Power' : 'I have a Power'}
+        {isEnabled ? 'I need Power' : 'I have the Power'}
       </Text>
     </View>
   );
