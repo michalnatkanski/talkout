@@ -10,12 +10,18 @@ import Animated, {
 } from 'react-native-reanimated';
 import {colors} from '../../styles';
 
+type SwitchProps = {
+  setIsEnabled: (isEnabled: boolean) => void;
+  isEnabled: boolean;
+};
+
 type SquareProps = {
   rotateStyles: any;
   isEnabled: boolean;
   shadowOffset: number;
   opacity: number;
 };
+
 const Square = ({
   rotateStyles,
   isEnabled,
@@ -44,13 +50,7 @@ const Square = ({
   );
 };
 
-export const Switch = () => {
-  const [isEnabled, setIsEnabled] = useState(false);
-
-  const toggleSwitch = () => {
-    setIsEnabled(!isEnabled);
-  };
-
+export const Switch = ({setIsEnabled, isEnabled}: SwitchProps) => {
   const rotation1 = useSharedValue(0);
   const rotation2 = useSharedValue(0);
   const rotation3 = useSharedValue(0);
@@ -59,7 +59,6 @@ export const Switch = () => {
     rotation1.value = withRepeat(
       withTiming(360, {
         duration: 2000,
-
         easing: Easing.linear,
       }),
       -1,
@@ -68,7 +67,6 @@ export const Switch = () => {
     rotation2.value = withRepeat(
       withTiming(360, {
         duration: 2500,
-
         easing: Easing.linear,
       }),
       -1,
@@ -111,7 +109,7 @@ export const Switch = () => {
 
   return (
     <View style={styles.container}>
-      <TouchableWithoutFeedback onPress={toggleSwitch}>
+      <TouchableWithoutFeedback onPress={() => setIsEnabled(!isEnabled)}>
         <View style={styles.switchWrapper}>
           <Animated.View style={[styles.switch, switchAnimation]}>
             <Square
