@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useEffect} from 'react';
 import {View, TouchableWithoutFeedback, Text} from 'react-native';
 import styles from './Switch.styles';
 import Animated, {
@@ -17,71 +17,54 @@ type SwitchProps = {
 
 type SquareProps = {
   rotateStyles: any;
-  isEnabled: boolean;
+  colorStyles: any;
   shadowOffset: number;
   opacity: number;
 };
 
-const Square = ({
-  rotateStyles,
-  isEnabled,
-  shadowOffset,
-  opacity,
-}: SquareProps) => {
-  const color = isEnabled
-    ? colors.MAIN_COLORS.SECONDARY
-    : colors.MAIN_COLORS.TERTIARY;
-  return (
-    <Animated.View
-      style={[
-        styles.square,
-        rotateStyles,
-        {
-          opacity: opacity,
-          backgroundColor: color,
-          shadowColor: color,
-          shadowOffset: {
-            width: shadowOffset,
-            height: shadowOffset,
-          },
-        },
-      ]}
-    />
-  );
-};
+const rotationConfigs = [
+  {duration: 2000, shadowOffset: 5, opacity: 1},
+  {duration: 2500, shadowOffset: 10, opacity: 0.5},
+  {duration: 3000, shadowOffset: 15, opacity: 0.7},
+];
 
-export const Switch = ({setIsEnabled, isEnabled}: SwitchProps) => {
-  const rotation1 = useSharedValue(0);
-  const rotation2 = useSharedValue(0);
-  const rotation3 = useSharedValue(0);
+const Square = React.memo(
+  ({rotateStyles, colorStyles, shadowOffset, opacity}: SquareProps) => {
+    console.log('QA - Square rendered');
+    return (
+      <Animated.View
+        style={[
+          styles.square,
+          rotateStyles,
+          colorStyles,
+          {
+            opacity: opacity,
+            shadowOffset: {
+              width: shadowOffset,
+              height: shadowOffset,
+            },
+          },
+        ]}
+      />
+    );
+  },
+);
+
+export const Switch = React.memo(({setIsEnabled, isEnabled}: SwitchProps) => {
+  const rotations = rotationConfigs.map(() => useSharedValue(0));
 
   useEffect(() => {
-    rotation1.value = withRepeat(
-      withTiming(360, {
-        duration: 2000,
-        easing: Easing.linear,
-      }),
-      -1,
-      false,
-    );
-    rotation2.value = withRepeat(
-      withTiming(360, {
-        duration: 2500,
-        easing: Easing.linear,
-      }),
-      -1,
-      false,
-    );
-    rotation3.value = withRepeat(
-      withTiming(360, {
-        duration: 3000,
-
-        easing: Easing.linear,
-      }),
-      -1,
-      false,
-    );
-  }, []);
+    rotations.map((rotation, i) => {
+      rotation.value = withRepeat(
+        withTiming(360, {
+          duration: rotationConfigs[i].duration,
+          easing: Easing.linear,
+        }),
+        -1,
+        false,
+      );
+    });
+  }, [rotations]);
 
   const switchAnimation = useAnimatedStyle(() => {
     return {
@@ -89,47 +72,40 @@ export const Switch = ({setIsEnabled, isEnabled}: SwitchProps) => {
     };
   });
 
-  const rotate1Styles = useAnimatedStyle(() => {
+  const rotationsStyles = rotations.map((rotation, i) => {
+    return useAnimatedStyle(() => {
+      return {
+        transform: [{rotate: `${rotation.value}deg`}],
+      };
+    });
+  });
+
+  const colorStyles = useAnimatedStyle(() => {
+    const color = isEnabled
+      ? colors.MAIN_COLORS.SECONDARY
+      : colors.MAIN_COLORS.TERTIARY;
     return {
-      transform: [{rotate: `${rotation1.value}deg`}],
+      backgroundColor: withTiming(color),
+      shadowColor: withTiming(color),
     };
   });
 
-  const rotate2Styles = useAnimatedStyle(() => {
-    return {
-      transform: [{rotate: `${rotation2.value}deg`}],
-    };
-  });
-
-  const rotate3Styles = useAnimatedStyle(() => {
-    return {
-      transform: [{rotate: `${rotation3.value}deg`}],
-    };
-  });
+  console.log('QA - Switch rendered');
 
   return (
     <View style={styles.container}>
       <TouchableWithoutFeedback onPress={() => setIsEnabled(!isEnabled)}>
         <View style={styles.switchWrapper}>
           <Animated.View style={[styles.switch, switchAnimation]}>
-            <Square
-              rotateStyles={rotate1Styles}
-              isEnabled={isEnabled}
-              shadowOffset={5}
-              opacity={1}
-            />
-            <Square
-              rotateStyles={rotate2Styles}
-              isEnabled={isEnabled}
-              shadowOffset={10}
-              opacity={0.5}
-            />
-            <Square
-              rotateStyles={rotate3Styles}
-              isEnabled={isEnabled}
-              shadowOffset={15}
-              opacity={0.7}
-            />
+            {rotationsStyles.map((style, i) => (
+              <Square
+                key={i}
+                rotateStyles={style}
+                colorStyles={colorStyles}
+                shadowOffset={rotationConfigs[i].shadowOffset}
+                opacity={rotationConfigs[i].opacity}
+              />
+            ))}
           </Animated.View>
         </View>
       </TouchableWithoutFeedback>
@@ -138,4 +114,4 @@ export const Switch = ({setIsEnabled, isEnabled}: SwitchProps) => {
       </Text>
     </View>
   );
-};
+});
