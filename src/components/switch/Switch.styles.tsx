@@ -1,9 +1,10 @@
 import {StyleSheet} from 'react-native';
+import {spacings} from '../../styles';
 
 export default StyleSheet.create({
   container: {
     width: '100%',
-    paddingHorizontal: 24,
+    paddingHorizontal: spacings.SCALE_24,
     alignItems: 'center',
   },
   switchWrapper: {
@@ -29,7 +30,7 @@ export default StyleSheet.create({
     position: 'absolute',
     height: 55,
     width: 55,
-    borderRadius: 15,
+    borderRadius: 20,
     shadowOpacity: 0.8,
     shadowRadius: 25,
     elevation: 8,
